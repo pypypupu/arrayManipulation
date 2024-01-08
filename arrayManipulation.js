@@ -11,10 +11,10 @@ const arrEqual = (arr1, arr2) => {
 
     return true;
 }
-const push = (arr, arg) => Array(arr.length + 1).fill().map((val, index) => index === arr.length ? arg : arr[index]);
-const push2 = (arr, arg) => [...arr, arg]
-const unshift = (arr, arg) => Array(arr.length + 1).fill().map((val, index) => index === 0 ? arg : arr[index - 1]);
-const unshift2 = (arr, arg) => [arg, ...arr]
+const pushWithMap = (arr, arg) => Array(arr.length + 1).fill().map((val, index) => index === arr.length ? arg : arr[index]);
+const pushWithSpread = (arr, arg) => [...arr, arg]
+const unshiftWithMap = (arr, arg) => Array(arr.length + 1).fill().map((val, index) => index === 0 ? arg : arr[index - 1]);
+const unshiftSpreadF = (arr, arg) => [arg, ...arr]
 const insertAt = (arr, at, arg) => {
     let mem = 0
     return Array(arr.length + 1).fill().map((val, index) => {
