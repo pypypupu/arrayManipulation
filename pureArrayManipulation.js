@@ -1,11 +1,20 @@
+var colors = require('colors');
+colors.enable();
+const measurePerformance = (fn) => {
+    const t0 = performance.now();
+    const results = fn();
+    const t1 = performance.now();
+    return [results, t1 - t0];
+}
 const testFn = (resultFn, testedFn, compareResultsFn) => {
     return {
         test: (...args) => {
-            const testValues = testedFn(...args)
-            const testAgainst = resultFn(...args)
-            const testResult = compareResultsFn(testValues, testAgainst)
+            const testValues = measurePerformance(() => testedFn(...args))
+            const testAgainst = measurePerformance(() => resultFn(...args))
+            const testResult = compareResultsFn(testValues[0], testAgainst[0])
             const testFnName = testedFn.name
-            console.log(`Test values ${testValues} are ${testResult ? "" : "not "}equal to ${testAgainst} for function ${testFnName}.`)
+            let result = `Function ${testFnName} took ${testValues[1]}ms with result ${testValues[0]} that is ${testResult ? "" : "not "}equal to ${testAgainst[0]}. Expect function took ${testAgainst[1]}ms.`
+            console.log(testResult ? result.green : result.red)
         }
     }
 }
@@ -172,7 +181,10 @@ const testFindDifference = testFn((arr1, arr2) => {
 
 }, findDifference, arrEqual)
 
-
+const testError = testFn((arr, arg) => {
+    return [1]
+}, push, arrEqual)
+testError.test([1], 2)
 testPush.test([1, 2, 3, 4, 5, 6, 7, 8, 9], 100)
 testPush.test([1, 124, 17, 568, 3, 801, 8, 4641], 9726)
 testUnshift.test([1, 2, 3, 4, 5, 6, 7, 8, 9], 100)
@@ -180,4 +192,5 @@ testUnshift.test([1, 124, 17, 568, 3, 801, 8, 4641], 9726)
 testFlat.test([1, [2], [3, [[4]]], [5, 6]])
 testFlat.test([1, 2, 3, [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]])
 testFindDifference.test([1, 1001, 2301, 10], [0, 10, 230, 40, 1010, 1, 1001, 10])
+testFindDifference.test([1, 1001, 2301, 10, 10, 10, 1010, 2010, 4051, 5329, 1234, 1534, 2859, 43], [0, 10, 230, 54, 43, 3010, 2010, 40, 1010, 1, 1001, 10])
 testFindDifference.test([1, 5, 7], [50, 13, 1, 5])

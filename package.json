@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "colors": "^1.4.0"
+  },
+  "scripts": {
+    "start": "node ./arrayManipulation.js",
+    "pure": "node ./pureArrayManipulation.js"
+  }
+}
