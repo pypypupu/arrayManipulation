@@ -37,6 +37,19 @@ const flat = (arr) => {
 }
 const sortUnique = (arr) => Array.from(new Set(flat(arr))).sort((a, b) => a - b)
 
+const findDifference = (arr1, arr2) => {
+    let map = new Map();
+    let merged = [...arr1, ...arr2]
+    for (let i = 0; i < merged.length; i++) {
+        if (!map.has(merged[i]))
+            map.set(merged[i], 1)
+        else
+            map.delete(merged[i])
+    }
+    return Array.from(map).map((x) => x[0]).sort((a, b) => a - b)
+}
+
+console.log(findDifference([1, 5, 7], [50, 13, 1, 5]))
 test([1, 2, 3, 4, 5, 6, 100], push, arrEqual, [1, 2, 3, 4, 5, 6], 100)
 test([1, 2, 3, 4, 5, 6, 100], push2, arrEqual, [1, 2, 3, 4, 5, 6], 100)
 test([100, 1, 2, 3, 4, 5, 6], unshift, arrEqual, [1, 2, 3, 4, 5, 6], 100)
