@@ -113,44 +113,39 @@ const sortUnique = (arr) => {
 const findDifference = (arr1, arr2) => {
     let mergedLength = arr1.length + arr2.length
     let merged = Array(mergedLength).fill()
-    for (let i = 0; i < arr1.length; i++) {
+    for (let i = 0; i < arr1.length; i++)
         merged[i] = arr1[i]
-    }
-    for (let i = 0; i < arr2.length; i++) {
+    for (let i = 0; i < arr2.length; i++)
         merged[arr1.length + i] = arr2[i]
+    merged.sort((a, b) => a - b)
+    console.log(merged.join())
+    mergedIdx = Array(merged.length).fill(0)
+    let j = 1;
+    for (let i = 1; i < merged.length; i++) {
+        if (merged[i] === merged[i - 1])
+            mergedIdx[i - 1] = 1
     }
+    console.log(mergedIdx.join())
+    for (let i = 1; i < merged.length; i++) {
+        if (merged[i] != merged[i - 1]) {
+            merged[j] = merged[i]
+            mergedIdx[j] = mergedIdx[i]
 
-    let hashSize = 1000
-    let valuesHashMap = Array(hashSize).fill([])
-    let idxHashMap = Array(hashSize).fill([])
-    let uniqueArr = []
+            j++;
+        }
+    }
+    mergedIdx.length = j
+    j = 0
     for (let i = 0; i < merged.length; i++) {
-        let skip = false;
-        for (let j = 0; j < valuesHashMap[merged[i] % hashSize].length; j++) {
-            if (merged[i] === valuesHashMap[merged[i] % hashSize][j]) {
-                idxHashMap[merged[i] % hashSize][j] = -1
-                skip = true
-                break
-            }
-        }
-        if (!skip) {
-            valuesHashMap[merged[i] % hashSize] = push(valuesHashMap[merged[i] % hashSize], merged[i]);
-            idxHashMap[merged[i] % hashSize] = push(idxHashMap[merged[i] % hashSize], uniqueArr.length)
-            uniqueArr = push(uniqueArr, merged[i])
-            skip = false
+        if (mergedIdx[i] === 0) {
+            merged[j] = merged[i]
+            j++;
         }
     }
-    let outerJoinArr = []
-    for (let i = 0; i < uniqueArr.length; i++) {
-        for (let j = 0; j < valuesHashMap[uniqueArr[i] % hashSize].length; j++) {
-            if (idxHashMap[uniqueArr[i] % hashSize][j] != -1) {
-                idxHashMap[uniqueArr[i] % hashSize][j] = -1
-                outerJoinArr = push(outerJoinArr, valuesHashMap[uniqueArr[i] % hashSize][j])
-            }
-        }
-    }
-    return outerJoinArr.sort((a, b) => a - b)
+    merged.length = j
+    return merged;
 }
+
 
 // tests
 const testPush = testFn((arr, arg) => {
